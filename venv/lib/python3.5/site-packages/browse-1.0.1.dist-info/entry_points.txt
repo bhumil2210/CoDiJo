@@ -1,0 +1,4 @@
+[console_scripts]
+browse = browse.browser:main
+ibrowse = browse.browser:main
+
