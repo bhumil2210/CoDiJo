@@ -11,7 +11,7 @@ cursor = db.cursor()
 # class for naukri.com
 class Naukri:
 
-    i = 1
+    i = 3
 
     @staticmethod
     def remove_starting_space(string):
@@ -32,10 +32,10 @@ class Naukri:
         cleantext = re.sub(cleanr, '', str(html_string)).strip()
         return cleantext
 
-    def naukri_job(self, url):
+    def naukri_job(self, naukri_url):
         try:
-            url = 'https://www.naukri.com/'+url.replace(' ', '-')+'-jobs'
-            page = requests.get(url)
+            naukri_url = 'https://www.naukri.com/' + naukri_url.replace(' ', '-') + '-jobs'
+            page = requests.get(naukri_url)
             soup = BeautifulSoup(page.text, 'html.parser')
             url_list = []
             job_name = soup.find_all(attrs={"class": "desig", "itemprop": "title"})
@@ -100,12 +100,13 @@ class Naukri:
             cursor.execute(query, args)
             db.commit()
         except Exception:
-            pass
+            print("Warning")
         Naukri.i += 1
         
 
 # url = input("Enter keyword")
 # n = Naukri()
+# print(n)
 # n.naukri_job(url)
 # n.naukri_job(url)
 # n.naukri_job(url)
