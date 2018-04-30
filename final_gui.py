@@ -56,7 +56,7 @@ def frame2():
         search_jobs_object.search_jobs(job)
 
         if not search_jobs_object.is_all_alive:
-            print("loading over")
+            # print("loading over")
             # load.destroy()
             # text.destroy()
             db = mysql.connector.connect(host="localhost", user="root", passwd="Bhumil2211", db="jobs")
@@ -93,50 +93,40 @@ def frame2():
             cursor.execute(final_query)
             rows1 = cursor.fetchall()
 
-
             def checkpopulate(frame):
                 # Put in some fake data
 
                 c = 2
                 for row in rows1:
 
-
-                    # if(row[5].find(loc)!=-1):
-
                     record = tk.Listbox(frame, bd=0, width="80", height="15", background="#A9CCE3",
                                         font=tk.font.Font(family='Helvetica', size=12))
                     record.config(highlightbackground="black", highlightthickness=0)
 
                     Scrollbar = tk.Scrollbar(frame)
-
-                    numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
-                    # check = ["8 to 10 years"]
-                    # exp = 5
+                    numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+                    checklist = []
                     y = False
-                    checklist = [0, 0, 0, 0]
-                    k = 0
-                    for j in numbers:
-                        if row[3].find(str(j)) != -1:
-                            checklist[k] = j
-                            k = k + 1
-                    try:
-                        checklist.remove(0)
-                    except Exception:
-                        pass
+                    if s:
+                        experience = list(row[4])
+                        for i in range(len(experience) - 1):
+                            if experience[i] in numbers and experience[i + 1] not in numbers and experience[i - 1] not in numbers:
+                                checklist.append(experience[i])
+                            elif experience[i] in numbers and experience[i + 1] in numbers:
+                                double_digit = experience[i] + experience[i + 1]
+                                checklist.append(double_digit)
 
-                    length = len(checklist)
-                    for i in range(3, length + 1):
-                        checklist = checklist[:0] + checklist[1:]
+                        x = len(checklist)
+                        if x == 1 and int(checklist[0]) <= int(s):
+                            y = True
+                        elif x > 1:
+                            if int(checklist[0]) <= int(s) <= int(checklist[1]):
+                                y = True
+                            elif int(checklist[0]) <= int(s) and int(checklist[1]) <= int(s):
+                                y = True
 
-                    if int(checklist[0]) <= int(s) <= int(checklist[1]):
+                    else:
                         y = True
-
-                    elif int(checklist[0]) <= int(s) and int(checklist[1]) <= int(s):
-                        y = True
-
-                    print(y)
-
-
                     if y:
                         record.insert(1, row[0])
                         record.insert(2, "")
@@ -144,15 +134,11 @@ def frame2():
                         record.insert(4, "")
 
                         x = row[2]
-                        i = 2
+                        i = 5
                         y = len(x)
                         start = 0
                         end = 99
-                        print(x)
                         while y >= 99:
-                            # print("Inside loop")
-                            # print(end - start)
-                            # print(x)
                             record.insert(i, x[start:end] + "-")
 
                             # print(x[start:end])
@@ -163,20 +149,18 @@ def frame2():
                             i += 1
                             start += 99
                             end += 99
-
-                        record.insert(i, x[start:])
-                        print(x[start:end])
+                        i -= 1
+                        # record.insert(i, x[start:])
 
                         record.insert(i + 1, "")
-                        record.insert(i + 2, "Work Experience:" + row[3])
+                        record.insert(i + 2, "Key Skills: " + row[3])
                         record.insert(i + 3, "")
-                        record.insert(i + 4, "Key Skills:" + row[4])
+                        record.insert(i + 4, "Work Experience: " + row[4])
                         record.insert(i + 5, "")
-                        record.insert(i + 6, "Location:" + row[5])
+                        record.insert(i + 6, "Location: " + row[5])
                         record.insert(i + 7, "")
-                        record.insert(i + 8, "For more Details:" + row[6])
+                        record.insert(i + 8, "For more Details: " + row[6])
                         # record.pack(pady=20)
-                        print('This row is inserted')
 
                         record.grid(row=c, column=0, padx=200)
                         record.bind('<<ListboxSelect>>', dbclick)
@@ -196,7 +180,6 @@ def frame2():
                 cursor.execute("truncate table job_details")
                 db.commit()
                 root.quit()
-
 
             canvas = tk.Canvas(root, borderwidth=0, background="#A9CCE3")
             frame = tk.Frame(canvas, background="#A9CCE3", padx=70, pady=20)
@@ -221,7 +204,6 @@ def frame2():
                 side="right", anchor="n", pady=30, padx=50)
 
             checkpopulate(frame)
-
 
     # root = tk.Tk()
     root = tk.Tk()
@@ -294,13 +276,17 @@ def frame2():
     w3.create_line(-4000, 0, 4000, 0, fill="black", width=5)
 
     e2.pack(padx=50, pady=(20, 0))
+
+    def enter(event):
+        newframe(root)
+
+    e2.bind('<Return>', enter)
     w4 = tk.Canvas(root, width=1000, height=10, bd=0, highlightthickness=0)
     w4.configure(bg="#A9CCE3")
     w4.pack(padx=45, pady=(0, 20))
     w4.create_line(-4000, 0, 4000, 0, fill="black", width=5)
 
     b.pack(padx=50, pady=(20, 0))
-
     root.mainloop()
 
 
